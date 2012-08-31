@@ -17,8 +17,8 @@ The project stack is:
 
 .. _Django: http://djangoproject.com
 .. _Python: http://python.org
-.. _HTLM5 Boilerplate: http://html5boilerplate.com/
-.. _Twitter Bootstrap: http://twitter.github.com/bootstrap/
+.. _`HTML5 Boilerplate`: http://html5boilerplate.com/
+.. _`Twitter Bootstrap`: http://twitter.github.com/bootstrap/
 .. _SASS: http://sass-lang.com/
 
 
@@ -31,6 +31,8 @@ Some of its features:
 * Makes use of HTML5, CSS3
 
 * Easy two-step registration
+
+.. _Sentry: http://getsentry.com
 
 Installation
 ------------
