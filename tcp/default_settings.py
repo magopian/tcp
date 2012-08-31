@@ -83,7 +83,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.messages',
 
-    'django_extensions',
     'floppyforms',
     'password_reset',
     'raven.contrib.django',
