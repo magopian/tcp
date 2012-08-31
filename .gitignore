@@ -1,0 +1,7 @@
+*.sqlite
+*.pyc
+tcp/media
+tcp/settings.py
+.sass-cache
+dist
+tcp.egg-info

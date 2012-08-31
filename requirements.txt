@@ -1,0 +1,10 @@
+Django==1.4
+django-classy-tags==0.3.4.1
+django-floppyforms==1.0
+django-le-social
+django-password-reset==0.2
+django-ratelimit-backend==0.1
+psycopg2==2.4.5
+pytz==2012c
+raven==1.9.1
+fabric

@@ -1,0 +1,10 @@
+include README.rst requirements.txt LICENSE
+recursive-include tcp/templates *
+recursive-include tcp/locale *
+recursive-include tcp/core/static *
+recursive-include tcp/core/templates *
+recursive-include tcp/core/tests *
+recursive-exclude tcp *.pyc
+recursive-exclude tcp *.scss
+recursive-exclude tcp/test_media *
+exclude tcp/settings.py
