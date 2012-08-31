@@ -13,7 +13,7 @@ from raven.contrib.django.models import client
 
 admin.autodiscover()
 
-client.captureException()
+client.captureException()  # raven (sentry client)
 
 
 robots = lambda _: HttpResponse('User-agent: *\nDisallow:\n',

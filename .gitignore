@@ -5,3 +5,5 @@ tcp/settings.py
 .sass-cache
 dist
 tcp.egg-info
+deploy.sh
+TODO.txt

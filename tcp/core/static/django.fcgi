@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+"""Specific for Alwaysdata fcgi hosting"""
+
 from os import path
 import os
 import sys

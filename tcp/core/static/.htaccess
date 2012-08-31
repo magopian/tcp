@@ -1,3 +1,4 @@
+# specific for Alwaysdata fcgi hosting
 AddHandler fcgid-script .fcgi
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f

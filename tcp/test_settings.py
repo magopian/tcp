@@ -4,7 +4,7 @@
 import warnings
 warnings.simplefilter('always')
 
-from default_settings import *  # noqa
+from default_settings import *  # NOQA
 
 SECRET_KEY = 'test secret key'
 

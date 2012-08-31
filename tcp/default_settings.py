@@ -83,11 +83,13 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.messages',
 
+    'django_extensions',
     'floppyforms',
+    'password_reset',
     'raven.contrib.django',
+    'south',
 
     'tcp.core',
-    'password_reset',
 )
 
 LOCALE_PATHS = (
@@ -112,7 +114,7 @@ LOGGING = {
             'formatter': 'simple',
         },
         'sentry': {
-            'level': 'INFO',
+            'level': 'ERROR',
             'class': 'raven.contrib.django.handlers.SentryHandler',
         },
     },
