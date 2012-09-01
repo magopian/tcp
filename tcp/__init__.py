@@ -15,5 +15,6 @@ try:
     add_to_builtins('django.templatetags.i18n')
     add_to_builtins('django.templatetags.future')
     add_to_builtins('django.templatetags.tz')
+    add_to_builtins('django.templatetags.static')
 except ImportError:
     pass
