@@ -1,5 +1,9 @@
 {% extends "base.html" %}
+{% load floppyforms %}
 
 {% block content %}
-    <h2>{% trans "Home" %}</h2>
+    <form action="{% url 'core:home' %}" method="post">{% csrf_token %}
+        {% form form using "floppyforms/layouts/p.html" %}
+        <input type="submit" value="{% trans "Clean this!" %}" />
+    </form>
 {% endblock content %}
