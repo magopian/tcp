@@ -37,16 +37,23 @@ class Request(models.Model):
 
     def save(self, *args, **kwargs):
         """Save the request to the database, and try to validate it."""
+        video_id, provider = self.match()
+        if provider is not None:
+            self.provider = provider
+            self.video_link = self.get_link(video_id, provider)
+            self.clean_code = self.get_clean_code(self.video_link, provider)
+        else:
+            self.message = _("No provider found for this video")
         super(Request, self).save(*args, **kwargs)
 
     def match(self):
         """Return [video_id, provider] or None from an embed code"""
         for lm in LinkMatch.objects.all():  # loop over all possible patterns
             res = re.search(lm.pattern, self.initial_code,
-                            flags=re.IGNORECASE | re.MULTILINE)
+                                flags=re.IGNORECASE | re.MULTILINE)
             if res:
-                return [res, lm.provider]
-        return None
+                return [res.groups()[0], lm.provider]
+        return [None, None]
 
     def get_link(self, video_id, provider):
         """Return the full video link from a video id and a provider."""

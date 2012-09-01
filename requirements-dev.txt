@@ -1,6 +1,7 @@
 django-debug-toolbar==0.9.4
 django-extensions==0.9
 flake8==1.4
+ipdb==0.7
 mock==0.8.0
 pyinotify==0.9.3
 Werkzeug==0.8.3
