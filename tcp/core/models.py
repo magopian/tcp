@@ -11,7 +11,7 @@ from tcp.provider.models import Provider, LinkMatch
 
 
 class Request(models.Model):
-    """Request for a video embed code"""
+    """Request for a video embed code."""
     initial_code = models.TextField(help_text=_("Requested video embed code"))
     video_link = models.URLField(
             max_length=200, blank=True,
@@ -35,16 +35,25 @@ class Request(models.Model):
     def __unicode__(self):
         return unicode(self.pk)
 
+    def save(self, *args, **kwargs):
+        """Save the request to the database, and try to validate it."""
+        super(Request, self).save(*args, **kwargs)
+
     def match(self):
         """Return [video_id, provider] or None from an embed code"""
         for lm in LinkMatch.objects.all():  # loop over all possible patterns
             res = re.search(lm.pattern, self.initial_code,
-                            flags=re.IGNORECASE|re.MULTILINE)
+                            flags=re.IGNORECASE | re.MULTILINE)
             if res:
                 return [res, lm.provider]
         return None
 
     def get_link(self, video_id, provider):
-        """Return the full video link from a video id and a provider"""
+        """Return the full video link from a video id and a provider."""
         template = Template(provider.link_template)
         return template.render(Context({'video_id': video_id}))
+
+    def get_clean_code(self, video_link, provider):
+        """Return the new embed code from a video link and a provider."""
+        template = Template(provider.embed_template)
+        return template.render(Context({'video_link': video_link}))

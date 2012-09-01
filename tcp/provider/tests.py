@@ -5,4 +5,4 @@ from django.test import TestCase
 
 
 class ProviderTest(TestCase):
-    """Test the provider"""
+    """Test the provider."""
