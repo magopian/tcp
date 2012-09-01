@@ -1,10 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from tcp.provider.models import Provider
+from tcp.provider.models import Provider, LinkMatch
 
 
 class Request(models.Model):
@@ -27,7 +29,21 @@ class Request(models.Model):
             help_text=_("Provider of this video"))
 
     class meta:
-        ordering = ['-pk']
+        ordering = ['-id']
 
     def __unicode__(self):
-        return self.pk
+        return unicode(self.pk)
+
+    def match(self):
+        """Match a video embed code to a provider, or return False"""
+        for lm in LinkMatch.objects.all():  # loop over all possible patterns
+            res = re.search(lm.pattern, self.initial_code,
+                            flags=re.IGNORECASE|re.MULTILINE)
+            if res:
+                self.provider = lm.provider
+                self.save()
+                return res
+        else:  # no match found
+            self.message = _("No provider found")
+            self.save()
+        return False
