@@ -4,6 +4,7 @@
 import re
 
 from django.db import models
+from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
 
 from tcp.provider.models import Provider, LinkMatch
@@ -35,15 +36,15 @@ class Request(models.Model):
         return unicode(self.pk)
 
     def match(self):
-        """Match a video embed code to a provider, or return False"""
+        """Return [video_id, provider] or None from an embed code"""
         for lm in LinkMatch.objects.all():  # loop over all possible patterns
             res = re.search(lm.pattern, self.initial_code,
                             flags=re.IGNORECASE|re.MULTILINE)
             if res:
-                self.provider = lm.provider
-                self.save()
-                return res
-        else:  # no match found
-            self.message = _("No provider found")
-            self.save()
-        return False
+                return [res, lm.provider]
+        return None
+
+    def get_link(self, video_id, provider):
+        """Return the full video link from a video id and a provider"""
+        template = Template(provider.link_template)
+        return template.render(Context({'video_id': video_id}))
