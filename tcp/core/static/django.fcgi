@@ -8,7 +8,7 @@ import sys
 
 _HERE = path.abspath(__file__)
 
-_ROOT = path.dirname(path.dirname(path.dirname(path.dirname(_HERE))))
+_ROOT = path.dirname(path.dirname(path.dirname(_HERE)))
 sys.path.insert(0, _ROOT)
 
 # use virtualenv "venv" which is in the project's parent folder
