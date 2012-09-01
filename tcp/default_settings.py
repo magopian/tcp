@@ -89,6 +89,7 @@ INSTALLED_APPS = (
     'south',
 
     'tcp.core',
+    'tcp.provider',
 )
 
 LOCALE_PATHS = (
