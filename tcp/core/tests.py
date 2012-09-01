@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from django.core.urlresolvers import reverse_lazy
 from django.test import TestCase
+from django.test.client import Client
 
 from tcp.provider.models import Provider, LinkMatch
 
@@ -81,3 +83,22 @@ class RequestTest(TestCase):
         request.save()
         self.assertEqual(request.provider, None)
         self.assertEqual(request.message, 'No provider found for this video')
+
+class RequestViewTest(TestCase):
+    """Test the views"""
+
+    def setUp(self):
+        self.client = Client()
+
+    def test_create_view(self):
+        """Create view"""
+        home_url = reverse_lazy('core:home')
+        self.assertEqual(Request.objects.count(), 0)
+        # invalid form post
+        response = self.client.post(home_url, {'initial_code': ''})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Request.objects.count(), 0)
+        # proper form post
+        response = self.client.post(home_url, {'initial_code': 'foo'})
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Request.objects.count(), 1)  # creates a request
