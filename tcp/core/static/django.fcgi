@@ -12,7 +12,7 @@ _ROOT = path.dirname(path.dirname(path.dirname(_HERE)))
 sys.path.insert(0, _ROOT)
 
 # use virtualenv "venv" which is in the project's parent folder
-activate_this = join(_ROOT, 'venv/bin/activate_this.py')
+activate_this = path.join(_ROOT, 'venv/bin/activate_this.py')
 execfile(activate_this, dict(__file__=activate_this))
 
 _PROJECT_NAME = 'tcp'
