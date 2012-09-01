@@ -31,10 +31,10 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-MEDIA_ROOT = os.path.join(HERE, 'media')
+MEDIA_ROOT = os.path.join(HERE, 'public', 'media')
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(HERE, 'static')
+STATIC_ROOT = os.path.join(HERE, 'public', 'static')
 STATIC_URL = '/static/'
 
 AUTHENTICATION_BACKENDS = (
