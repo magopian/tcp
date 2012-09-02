@@ -1,6 +1,8 @@
 TopCodingParty
 ==============
 
+Find the documentation at http://top-coding-party.readthedocs.org/en/latest/.
+
 .. image:: https://secure.travis-ci.org/magopian/tcp.png
    :alt: Build Status
    :target: https://secure.travis-ci.org/magopian/tcp
