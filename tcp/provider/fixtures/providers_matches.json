@@ -1,0 +1,103 @@
+[
+  {
+    "pk": 4,
+    "model": "provider.provider",
+    "fields": {
+      "link_template": "http://video.google.com/googleplayer.swf?docId={{ video_id }}",
+      "name": "Google Video",
+      "embed_template": "<embed id=VideoPlayback src=\"{{ video_link }}\" style=\"width:400px;height:326px\" allowFullScreen=true allowScriptAccess=always type=application/x-shockwave-flash> </embed>"
+    }
+  },
+  {
+    "pk": 3,
+    "model": "provider.provider",
+    "fields": {
+      "link_template": "http://player.vimeo.com/video/{{ video_id }}",
+      "name": "Vimeo",
+      "embed_template": "<iframe src=\"{{ video_link }}\" width=\"480\" height=\"372\" frameborder=\"0\"></iframe>"
+    }
+  },
+  {
+    "pk": 1,
+    "model": "provider.provider",
+    "fields": {
+      "link_template": "http://www.youtube.com/embed/{{ video_id }}",
+      "name": "Youtube",
+      "embed_template": "<iframe width=\"560\" height=\"315\" src=\"{{ video_link }}\" frameborder=\"0\" allowfullscreen></iframe>"
+    }
+  },
+  {
+    "pk": 5,
+    "model": "provider.provider",
+    "fields": {
+      "link_template": "http://embed.cdn01.net/player.php?width=640&height=360&tvButtonID=crosstv&id={{ video_id }}\r\n",
+      "name": "Cross TV",
+      "embed_template": "<iframe src='{{ video_link }}' frameborder='0' width='640' height='360'></iframe>"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "provider.provider",
+    "fields": {
+      "link_template": "http://www.dailymotion.com/swf/{{ video_id }}",
+      "name": "Dailymotion",
+      "embed_template": "<iframe frameborder=\"0\" width=\"480\" height=\"270\" src=\"{{ video_link }}\"></iframe>"
+    }
+  },
+  {
+    "pk": 4,
+    "model": "provider.linkmatch",
+    "fields": {
+      "pattern": "video.google.[^/]+/googleplayer.swf\\?docId=([^\"'/&?@]+)",
+      "provider": 4
+    }
+  },
+  {
+    "pk": 3,
+    "model": "provider.linkmatch",
+    "fields": {
+      "pattern": "vimeo.[^/]+/video/([^\"'/&?@]+)",
+      "provider": 3
+    }
+  },
+  {
+    "pk": 2,
+    "model": "provider.linkmatch",
+    "fields": {
+      "pattern": "dailymotion.[^/]+/swf/([^\"'/&?@]+)",
+      "provider": 2
+    }
+  },
+  {
+    "pk": 1,
+    "model": "provider.linkmatch",
+    "fields": {
+      "pattern": "youtube.[^/]+/v/([^\"'/&?@]+)",
+      "provider": 1
+    }
+  },
+  {
+    "pk": 5,
+    "model": "provider.linkmatch",
+    "fields": {
+      "pattern": "embed.cdn01.[^/]+/player.php\\?.*?&id=([^\"'/&?@]+)",
+      "provider": 5
+    }
+  },
+  {
+    "pk": 6,
+    "model": "provider.linkmatch",
+    "fields": {
+      "pattern": "flashvars='.*?id=([^\"'/&?@]+).*?tvButtonID=crosstv",
+      "provider": 5
+    }
+  },
+  {
+    "pk": 7,
+    "model": "provider.linkmatch",
+    "fields": {
+      "pattern": "dailymotion.[^/]+/embed/video/([^\"'/&?@]+)",
+      "provider": 2
+    }
+  }
+]
