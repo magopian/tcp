@@ -3,6 +3,10 @@ TopCodingParty
 
 Find the documentation at http://top-coding-party.readthedocs.org/en/latest/.
 
+Submit tickets and issues at https://github.com/magopian/tcp/issues.
+
+The source is available at https://github.com/magopian/tcp.
+
 .. image:: https://secure.travis-ci.org/magopian/tcp.png
    :alt: Build Status
    :target: https://secure.travis-ci.org/magopian/tcp
