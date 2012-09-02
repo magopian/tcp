@@ -78,6 +78,15 @@ Then deploy your application and run
 tables, then ``django-admin.py migrate --settings=tcp.settings`` to run all
 South_ migrations.
 
+The very first time you launch the application, once the database is set up,
+you may want to load some example providers and matches. To do that, use the
+following command::
+
+    django-admin.py loaddata providers_matches.json --settings=tcp.settings
+
+Be aware that if you do that again later, it will simply overwrite the entries,
+loosing your modifications to those entries, if any.
+
 
 Development
 -----------
