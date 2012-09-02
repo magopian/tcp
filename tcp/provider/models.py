@@ -11,9 +11,11 @@ class Provider(models.Model):
             max_length=50,
             help_text=_("Name of the video provider"))
     link_template = models.TextField(
-            help_text=_("Template to render for the full video link"))
+            help_text=_("Template to render for the full video link. "
+                        "Context: video_id"))
     embed_template = models.TextField(
-            help_text=_("Template to render for the embed code"))
+            help_text=_("Template to render for the embed code. "
+                        "Context: video_link"))
 
     class meta:
         ordering = ['name']
