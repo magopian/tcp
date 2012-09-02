@@ -32,3 +32,6 @@ compilemessages:
 
 sdist:
 	python setup.py sdist
+
+doc:
+	sphinx-build -b html docs output

@@ -7,7 +7,7 @@ TopCodingParty
 
 TCP is the accronym of TopCodingParty, http://topcodingparty.net.
 
-The project stack is:
+The project stack is based on
 
 * backend: Django_, a Python_ based web development framework for
   perfectionists with deadlines
@@ -77,6 +77,8 @@ Then deploy your application and run
 ``django-admin.py syncdb --settings=tcp.settings`` to create the database
 tables, then ``django-admin.py migrate --settings=tcp.settings`` to run all
 South_ migrations.
+
+.. _South: http://south.readthedocs.org/en/latest/
 
 The very first time you launch the application, once the database is set up,
 you may want to load some example providers and matches. To do that, use the
@@ -155,4 +157,14 @@ and Gorun_. This flow has been inspired by `Bruno Renié`_:
 Wishlist / ToDo
 ---------------
 
-* make the validation optional (validation is costly)
+* make the validation optional (validation is costly), or even in another
+  endpoint
+* put together a compatibility matrix for the following platforms:
+    - Internet explorer 6
+    - Firefox 3
+    - Chrome
+    - Safari
+    - Opera
+    - iOS
+    - Android
+* improve the validation "algorithm" to take corner cases into account
