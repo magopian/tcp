@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <ul>
+        <li>{% trans "Video link:" %} {{ object.video_link }}</li>
+        <li>{% trans "Is valid:" %} {{ object.is_valid|yesno:_("yes,no") }}</li>
+        <li>{% trans "Clean code:" %} {{ object.clean_code }}</li>
+        <li>{% trans "Message:" %} {{ object.message }}"}</li>
+    </ul>
+{% endblock content %}

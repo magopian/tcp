@@ -4,9 +4,10 @@
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseBadRequest
 from django.shortcuts import render
-from django.views.generic import CreateView
+from django.views.generic import CreateView, DetailView
 
 from .forms import RequestForm
+from .models import Request
 
 
 class RequestCreateView(CreateView):
@@ -23,10 +24,16 @@ class RequestCreateView(CreateView):
         res = super(RequestCreateView, self).form_valid(form)  # create object
         if self.request.META.get('HTTP_ACCEPT_ENCODING') == 'application/json':
             return render(self.request, 'core/home.json',
-                          {'object': self.object},
+                          {'vid_request': self.object},
                           content_type='application/json; charset=utf-8')
         return res
 
-create_view = RequestCreateView.as_view(form_class=RequestForm,
-                                        success_url=reverse_lazy('core:home'),
-                                        template_name='core/home.html')
+    def get_success_url(self):
+        return reverse_lazy('core:cleaned', kwargs={'pk': self.object.pk})
+
+create_view = RequestCreateView.as_view(
+        form_class=RequestForm,
+        success_url=reverse_lazy('core:cleaned'),
+        template_name='core/home.html')
+
+detail_view = DetailView.as_view(model=Request)

@@ -101,11 +101,14 @@ class RequestViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Request.objects.count(), 0)
         # proper form post
-        with self.assertTemplateUsed('core/home.html'):
+        with self.assertTemplateUsed('core/request_detail.html'):
             response = self.client.post(home_url, {'initial_code': 'foo'},
                                         follow=True)
-        self.assertRedirects(response, home_url)
         self.assertEqual(Request.objects.count(), 1)  # creates a request
+        request = Request.objects.all()[0]
+        cleaned_url = reverse('core:cleaned', kwargs={'pk': request.pk})
+        self.assertRedirects(response, cleaned_url)
+        self.assertContains(response, "Video link")
 
     def test_create_view_json(self):
         """Create view, with 'Accept' header set to json"""
@@ -124,3 +127,4 @@ class RequestViewTest(TestCase):
                          'application/json; charset=utf-8')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Request.objects.count(), 1)  # creates a request
+        self.assertContains(response, "video_link")
