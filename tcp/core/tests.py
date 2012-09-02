@@ -17,7 +17,8 @@ class RequestTest(TestCase):
         """Match a provider."""
         provider = Provider.objects.create(name='Foo',
                                            link_template='_',
-                                           embed_template='_')
+                                           embed_template='_',
+                                           validation_link_template='_')
         match = LinkMatch.objects.create(provider=provider,
                                          pattern='foo_video/(.*)')
         # matching request
@@ -45,7 +46,8 @@ class RequestTest(TestCase):
         provider = Provider.objects.create(
                 name='Foo',
                 link_template='http://{{ video_id }}',
-                embed_template='_')
+                embed_template='_',
+                validation_link_template='_')
         match = LinkMatch.objects.create(provider=provider,
                                          pattern='foo_video/(.*)')
         request = Request(initial_code='stuff foo_video/barbaz')
@@ -57,12 +59,30 @@ class RequestTest(TestCase):
         provider = Provider.objects.create(
                 name='Foo',
                 link_template='_',
-                embed_template='some code {{ video_link }}')
+                embed_template='some code {{ video_link }}',
+                validation_link_template='_')
         match = LinkMatch.objects.create(provider=provider,
                                          pattern='foo_video/(.*)')
         request = Request(initial_code='stuff foo_video/barbaz')
         link = request.get_clean_code('http://barbaz', provider)
         self.assertEqual(link, 'some code http://barbaz')
+
+    def test_validate(self):
+        """Validate the video link."""
+        provider = Provider.objects.create(
+                name='Foo',
+                link_template='_',
+                embed_template='_',
+                validation_link_template='http://httpbin.org/status/'
+                                         '{{video_id }}')
+        request = Request(initial_code='_')
+        res = request.validate('200', provider)
+        self.assertTrue(res)
+        res = request.validate('301', provider)
+        self.assertTrue(res)
+        res = request.validate('400', provider)
+        self.assertFalse(res)
+
 
     def test_save(self):
         """Process a request"""

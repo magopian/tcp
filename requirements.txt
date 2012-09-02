@@ -8,4 +8,5 @@ Fabric==1.4.3
 psycopg2==2.4.5
 pytz==2012d
 raven==2.0.5
+requests==0.13.9
 South==0.7.6

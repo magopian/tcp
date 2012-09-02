@@ -16,6 +16,9 @@ class Provider(models.Model):
     embed_template = models.TextField(
             help_text=_("Template to render for the embed code. "
                         "Context: video_link"))
+    validation_link_template = models.TextField(
+            help_text=_("Template to render for the validation of the link. "
+                        "Context: video_id"))
 
     class meta:
         ordering = ['name']

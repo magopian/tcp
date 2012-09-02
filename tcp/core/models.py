@@ -6,6 +6,7 @@ import re
 from django.db import models
 from django.template import Context, Template
 from django.utils.translation import ugettext_lazy as _
+import requests
 
 from tcp.provider.models import Provider, LinkMatch
 
@@ -42,6 +43,7 @@ class Request(models.Model):
             self.provider = provider
             self.video_link = self.get_link(video_id, provider)
             self.clean_code = self.get_clean_code(self.video_link, provider)
+            self.is_valid = self.validate(video_id, provider)
         else:
             self.message = _("No provider found for this video")
         super(Request, self).save(*args, **kwargs)
@@ -64,3 +66,14 @@ class Request(models.Model):
         """Return the new embed code from a video link and a provider."""
         template = Template(provider.embed_template)
         return template.render(Context({'video_link': video_link}))
+
+    def validate(self, video_id, provider):
+        """True if the status code of a HEAD request on the url is less than 
+        400."""
+        template = Template(provider.validation_link_template)
+        video_link = template.render(Context({'video_id': video_id}))
+        try:
+            req = requests.head(video_link)
+            return req.status_code < 400
+        except:
+            return False

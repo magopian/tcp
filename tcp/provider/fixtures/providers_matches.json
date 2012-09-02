@@ -1,11 +1,12 @@
 [
   {
-    "pk": 4,
+    "pk": 1,
     "model": "provider.provider",
     "fields": {
-      "link_template": "http://video.google.com/googleplayer.swf?docId={{ video_id }}",
-      "name": "Google Video",
-      "embed_template": "<embed id=VideoPlayback src=\"{{ video_link }}\" style=\"width:400px;height:326px\" allowFullScreen=true allowScriptAccess=always type=application/x-shockwave-flash> </embed>"
+      "link_template": "http://www.youtube.com/embed/{{ video_id }}",
+      "name": "Youtube",
+      "embed_template": "<iframe width=\"560\" height=\"315\" src=\"{{ video_link }}\" frameborder=\"0\" allowfullscreen></iframe>",
+      "validation_link_template": "http://www.youtube.com/watch?v={{ video_id }}"
     }
   },
   {
@@ -14,16 +15,28 @@
     "fields": {
       "link_template": "http://player.vimeo.com/video/{{ video_id }}",
       "name": "Vimeo",
-      "embed_template": "<iframe src=\"{{ video_link }}\" width=\"480\" height=\"372\" frameborder=\"0\"></iframe>"
+      "embed_template": "<iframe src=\"{{ video_link }}\" width=\"480\" height=\"372\" frameborder=\"0\"></iframe>",
+      "validation_link_template": "http://vimeo.com/{{ video_id }}"
     }
   },
   {
-    "pk": 1,
+    "pk": 4,
     "model": "provider.provider",
     "fields": {
-      "link_template": "http://www.youtube.com/embed/{{ video_id }}",
-      "name": "Youtube",
-      "embed_template": "<iframe width=\"560\" height=\"315\" src=\"{{ video_link }}\" frameborder=\"0\" allowfullscreen></iframe>"
+      "link_template": "http://video.google.com/googleplayer.swf?docId={{ video_id }}",
+      "name": "Google Video",
+      "embed_template": "<embed id=VideoPlayback src=\"{{ video_link }}\" style=\"width:400px;height:326px\" allowFullScreen=true allowScriptAccess=always type=application/x-shockwave-flash> </embed>",
+      "validation_link_template": "http://video.google.com/videoplay?docid={{ video_id }}"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "provider.provider",
+    "fields": {
+      "link_template": "http://www.dailymotion.com/embed/video/{{ video_id }}",
+      "name": "Dailymotion",
+      "embed_template": "<iframe frameborder=\"0\" width=\"480\" height=\"270\" src=\"{{ video_link }}\"></iframe>",
+      "validation_link_template": "http://www.dailymotion.com/video/{{ video_id }}"
     }
   },
   {
@@ -32,16 +45,8 @@
     "fields": {
       "link_template": "http://embed.cdn01.net/player.php?width=640&height=360&tvButtonID=crosstv&id={{ video_id }}\r\n",
       "name": "Cross TV",
-      "embed_template": "<iframe src='{{ video_link }}' frameborder='0' width='640' height='360'></iframe>"
-    }
-  },
-  {
-    "pk": 2,
-    "model": "provider.provider",
-    "fields": {
-      "link_template": "http://www.dailymotion.com/swf/{{ video_id }}",
-      "name": "Dailymotion",
-      "embed_template": "<iframe frameborder=\"0\" width=\"480\" height=\"270\" src=\"{{ video_link }}\"></iframe>"
+      "embed_template": "<iframe src='{{ video_link }}' frameborder='0' width='640' height='360'></iframe>",
+      "validation_link_template": "http://embed.cdn01.net/player.php?width=640&height=360&tvButtonID=crosstv&id={{ video_id }}\r\n"
     }
   },
   {
@@ -98,6 +103,14 @@
     "fields": {
       "pattern": "dailymotion.[^/]+/embed/video/([^\"'/&?@]+)",
       "provider": 2
+    }
+  },
+  {
+    "pk": 8,
+    "model": "provider.linkmatch",
+    "fields": {
+      "pattern": "youtube.[^/]+/embed/([^\"'/&?@]+)",
+      "provider": 1
     }
   }
 ]

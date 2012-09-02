@@ -150,3 +150,9 @@ and Gorun_. This flow has been inspired by `Bruno Renié`_:
 .. _Foreman: https://github.com/ddollar/foreman#readme
 .. _Gorun: https://github.com/peterbe/python-gorun#readme
 .. _`Bruno Renié`: http://bruno.im/2011/sep/29/streamline-your-django-workflow/
+
+
+Wishlist / ToDo
+---------------
+
+* make the validation optional (validation is costly)
