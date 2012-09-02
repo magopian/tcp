@@ -83,7 +83,7 @@ INSTALLED_APPS = (
 
     'floppyforms',
     'password_reset',
-    #'raven.contrib.django',
+    'raven.contrib.django',
     'south',
 
     'tcp.core',
