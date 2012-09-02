@@ -24,7 +24,7 @@ class RequestCreateView(CreateView):
         res = super(RequestCreateView, self).form_valid(form)  # create object
         if self.request.META.get('HTTP_ACCEPT_ENCODING') == 'application/json':
             return render(self.request, 'core/home.json',
-                          {'vid_request': self.object},
+                          {'object': self.object},
                           content_type='application/json; charset=utf-8')
         return res
 
