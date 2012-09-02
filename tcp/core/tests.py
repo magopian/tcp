@@ -124,3 +124,4 @@ class RequestViewTest(TestCase):
                          'application/json; charset=utf-8')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Request.objects.count(), 1)  # creates a request
+        assert False, response
