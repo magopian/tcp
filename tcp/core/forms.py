@@ -10,4 +10,4 @@ class RequestForm(forms.ModelForm):
     class Meta:
         fields = ['initial_code']
         model = Request
-        #widgets = {'initial_code': forms.Textarea}
+        widgets = {'initial_code': forms.Textarea}

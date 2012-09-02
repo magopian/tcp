@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
 
@@ -84,6 +84,7 @@ class RequestTest(TestCase):
         self.assertEqual(request.provider, None)
         self.assertEqual(request.message, 'No provider found for this video')
 
+
 class RequestViewTest(TestCase):
     """Test the views"""
 
@@ -92,13 +93,34 @@ class RequestViewTest(TestCase):
 
     def test_create_view(self):
         """Create view"""
-        home_url = reverse_lazy('core:home')
+        home_url = reverse('core:home')
         self.assertEqual(Request.objects.count(), 0)
         # invalid form post
-        response = self.client.post(home_url, {'initial_code': ''})
+        with self.assertTemplateUsed('core/home.html'):
+            response = self.client.post(home_url, {'initial_code': ''})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Request.objects.count(), 0)
         # proper form post
-        response = self.client.post(home_url, {'initial_code': 'foo'})
-        self.assertEqual(response.status_code, 302)
+        with self.assertTemplateUsed('core/home.html'):
+            response = self.client.post(home_url, {'initial_code': 'foo'},
+                                        follow=True)
+        self.assertRedirects(response, home_url)
+        self.assertEqual(Request.objects.count(), 1)  # creates a request
+
+    def test_create_view_json(self):
+        """Create view, with 'Accept' header set to json"""
+        home_url = reverse('core:home')
+        self.assertEqual(Request.objects.count(), 0)
+        # invalid form post
+        response = self.client.post(home_url, {'initial_code': ''},
+                                    HTTP_ACCEPT_ENCODING='application/json')
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(Request.objects.count(), 0)
+        # proper form post
+        with self.assertTemplateUsed('core/home.json'):
+            response = self.client.post(home_url, {'initial_code': 'foo'},
+                    follow=True, HTTP_ACCEPT_ENCODING='application/json')
+        self.assertEqual(response['Content-Type'],
+                         'application/json; charset=utf-8')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(Request.objects.count(), 1)  # creates a request
