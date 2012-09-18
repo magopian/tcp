@@ -138,8 +138,3 @@ LOGGING = {
         },
     },
 }
-
-RAVEN_CONFIG = {
-        'dsn': 'https://9fc4036179ca4b278a28e608b5d4f236:'
-               '3830fa98b1894486b6387a511f1eb9ff@app.getsentry.com/2247',
-}
