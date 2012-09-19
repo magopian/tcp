@@ -19,8 +19,7 @@ class RequestTest(TestCase):
                                            link_template='_',
                                            embed_template='_',
                                            validation_link_template='_')
-        match = LinkMatch.objects.create(provider=provider,
-                                         pattern='foo_video/(.*)')
+        LinkMatch.objects.create(provider=provider, pattern='foo_video/(.*)')
         # matching request
         request = Request(initial_code='some stuff foo_video/barbaz')
         request.match()
@@ -49,8 +48,7 @@ class RequestTest(TestCase):
                 link_template='http://{{ video_id }}',
                 embed_template='_',
                 validation_link_template='_')
-        match = LinkMatch.objects.create(provider=provider,
-                                         pattern='foo_video/(.*)')
+        LinkMatch.objects.create(provider=provider, pattern='foo_video/(.*)')
         request = Request(initial_code='_', video_id='bar', provider=provider)
         link = request.get_link()
         self.assertEqual(link, 'http://bar')
@@ -62,8 +60,7 @@ class RequestTest(TestCase):
                 link_template='http://{{ video_id }}',
                 embed_template='some code {{ video_link }}',
                 validation_link_template='_')
-        match = LinkMatch.objects.create(provider=provider,
-                                         pattern='foo_video/(.*)')
+        LinkMatch.objects.create(provider=provider, pattern='foo_video/(.*)')
         request = Request(initial_code='_', video_id='bar', provider=provider)
         link = request.get_clean_code()
         self.assertEqual(link, 'some code http://bar')
@@ -83,15 +80,13 @@ class RequestTest(TestCase):
         request = Request(initial_code='_', video_id='400', provider=provider)
         self.assertFalse(request.validate())
 
-
     def test_save(self):
         """Process a request"""
         provider = Provider.objects.create(
                 name='Foo',
                 link_template='http://{{ video_id }}',
                 embed_template='some code {{ video_link }}')
-        match = LinkMatch.objects.create(provider=provider,
-                                         pattern='foo_video/(.*)')
+        LinkMatch.objects.create(provider=provider, pattern='foo_video/(.*)')
         # matching request
         request = Request(initial_code='stuff foo_video/barbaz')
         request.save()
