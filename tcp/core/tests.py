@@ -73,12 +73,20 @@ class RequestTest(TestCase):
                 embed_template='_',
                 validation_link_template='http://httpbin.org/status/'
                                          '{{video_id }}')
-        request = Request(initial_code='_', video_id='200', provider=provider)
-        self.assertTrue(request.validate())
-        request = Request(initial_code='_', video_id='301', provider=provider)
-        self.assertTrue(request.validate())
-        request = Request(initial_code='_', video_id='400', provider=provider)
-        self.assertFalse(request.validate())
+
+        class Helper(object):
+            """Mock the requests.head calls."""
+
+            def __init__(self, status_code):
+                self.status_code = status_code
+
+            def head(self, link):
+                return self
+
+        request = Request(initial_code='_', video_id='foo', provider=provider)
+        self.assertTrue(request.validate(helper=Helper(200)))
+        self.assertTrue(request.validate(helper=Helper(301)))
+        self.assertFalse(request.validate(helper=Helper(400)))
 
     def test_save(self):
         """Process a request"""

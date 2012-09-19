@@ -11,10 +11,13 @@ from .models import Request
 
 
 class RequestCreateView(CreateView):
-    """Customized create view for Requests"""
+    """Customized create view for Requests."""
+    form_class = RequestForm
+    success_url = reverse_lazy('core:cleaned')
+    template_name = 'core/home.html'
 
     def form_invalid(self, form):
-        """If json (api), return json"""
+        """If json (api), return json."""
         if self.request.META.get('HTTP_ACCEPT_ENCODING') == 'application/json':
             return HttpResponseBadRequest()
         return super(RequestCreateView, self).form_invalid(form)
@@ -31,9 +34,6 @@ class RequestCreateView(CreateView):
     def get_success_url(self):
         return reverse_lazy('core:cleaned', kwargs={'pk': self.object.pk})
 
-create_view = RequestCreateView.as_view(
-        form_class=RequestForm,
-        success_url=reverse_lazy('core:cleaned'),
-        template_name='core/home.html')
+create_view = RequestCreateView.as_view()
 
 detail_view = DetailView.as_view(model=Request)

@@ -43,26 +43,26 @@ class Request(models.Model):
 
     def get_link(self):
         """Return the full video link from a video id and a provider."""
-        if not self.video_id:
+        if not self.video_id or self.provider is None:
             return
         template = Template(self.provider.link_template)
         return template.render(Context({'video_id': self.video_id}))
 
     def get_clean_code(self):
         """Return the new embed code from a video link and a provider."""
-        if not self.video_id:
+        if not self.video_id or self.provider is None:
             return
         template = Template(self.provider.embed_template)
         return template.render(Context({'video_link': self.get_link()}))
 
-    def validate(self):
+    def validate(self, helper=requests):
         """True if the status code of the url is less than 400."""
-        if not self.video_id:
+        if not self.video_id or self.provider is None:
             return
         template = Template(self.provider.validation_link_template)
         video_link = template.render(Context({'video_id': self.video_id}))
         try:
-            req = requests.head(video_link)
+            req = helper.head(video_link)
             return req.status_code < 400
         except:
             return False
