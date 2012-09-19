@@ -2,10 +2,10 @@
 
 {% block content %}
     <ul>
-        <li>{% trans "Video link:" %} {{ object.video_link }}</li>
+        <li>{% trans "Video ID:" %} {{ object.video_id }}</li>
         <li>{% trans "Provider:" %} {{ object.provider.name }}</li>
-        <li>{% trans "Is valid:" %} {{ object.is_valid|yesno:_("yes,no") }}</li>
-        <li>{% trans "Clean code:" %} {{ object.clean_code }}</li>
-        <li>{% trans "Message:" %} {{ object.message }}</li>
+        <li>{% trans "Video link:" %} {{ object.get_link }}</li>
+        <li>{% trans "Is valid:" %} {{ object.validate|yesno:_("yes,no") }}</li>
+        <li>{% trans "Clean code:" %} {{ object.get_clean_code|force_escape }}</li>
     </ul>
 {% endblock content %}

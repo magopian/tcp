@@ -7,10 +7,9 @@ from .models import Request
 
 
 class RequestAdmin(admin.ModelAdmin):
-    list_display = ('video_link', 'is_valid', 'provider')
-    list_filter = ('is_valid', 'provider')
-    model = Request
-    ordering = ['-id']
+    list_display = ('video_id', 'provider')
+    list_filter = ('provider',)
+    ordering = ('-id',)
     search_fields = ('initial_code',)
 
 

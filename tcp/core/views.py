@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from json import dumps
+
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseBadRequest
-from django.shortcuts import render
+from django.http import HttpResponseBadRequest, HttpResponse
 from django.views.generic import CreateView, DetailView
 
 from .forms import RequestForm
@@ -26,9 +27,13 @@ class RequestCreateView(CreateView):
         """If json (api), return json"""
         res = super(RequestCreateView, self).form_valid(form)  # create object
         if self.request.META.get('HTTP_ACCEPT_ENCODING') == 'application/json':
-            return render(self.request, 'core/home.json',
-                          {'object': self.object},
-                          content_type='application/json; charset=utf-8')
+            data = {'video_id': self.object.video_id,
+                    'provider': self.object.provider.name,
+                    'video_link': self.object.get_link(),
+                    'clean_code': self.object.get_clean_code(),
+                    'is_valid': 'true' if self.object.validate() else 'false'}
+            return HttpResponse(dumps(data),
+                                content_type='application/json; charset=utf-8')
         return res
 
     def get_success_url(self):

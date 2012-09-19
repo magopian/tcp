@@ -1,1 +1,0 @@
-{"video_link": "{{ object.video_link }}", "is_valid": "{{ object.is_valid|yesno:"true,false" }}", "clean_code": "{{ object.clean_code }}", "message": "{{ object.message }}", "provider": "{{ object.provider.name }}"}
