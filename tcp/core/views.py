@@ -28,7 +28,7 @@ class RequestCreateView(CreateView):
         res = super(RequestCreateView, self).form_valid(form)  # create object
         if self.request.META.get('HTTP_ACCEPT_ENCODING') == 'application/json':
             data = {'video_id': self.object.video_id,
-                    'provider': self.object.provider.name,
+                    'provider': unicode(self.object.provider),
                     'video_link': self.object.get_link(),
                     'clean_code': self.object.get_clean_code(),
                     'is_valid': 'true' if self.object.validate() else 'false'}

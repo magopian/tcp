@@ -3,9 +3,10 @@
 {% block content %}
     <ul>
         <li>{% trans "Video ID:" %} {{ object.video_id }}</li>
-        <li>{% trans "Provider:" %} {{ object.provider.name }}</li>
+        <li>{% trans "Provider:" %} {{ object.provider }}</li>
         <li>{% trans "Video link:" %} {{ object.get_link }}</li>
         <li>{% trans "Is valid:" %} {{ object.validate|yesno:_("yes,no") }}</li>
         <li>{% trans "Clean code:" %} {{ object.get_clean_code|force_escape }}</li>
     </ul>
+    <p><a href="{% url 'core:home' %}">{% trans "Back home" %}</a></p>
 {% endblock content %}

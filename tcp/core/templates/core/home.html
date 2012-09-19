@@ -2,8 +2,19 @@
 {% load floppyforms %}
 
 {% block content %}
+    <h2>{% trans "Enter your video embed code below" %}</h2>
+    <p>{% trans "It'll give you the video" %}</p>
+    <ul>
+        <li>{% trans "ID: uniquely identifies this video for a provider" %}</li>
+        <li>{% trans "provider: youtube, dailymotion, vimeo..." %}</li>
+        <li>{% trans "link: to view the video" %}</li>
+        <li>{% trans "is valid: check if the video is still available" %}</li>
+        <li>{% trans "cleaned code: cleaned and up to date embed code" %}</li>
+    </ul>
     <form action="{% url 'core:home' %}" method="post">
         {% form form using "floppyforms/layouts/p.html" %}
         <input type="submit" value="{% trans "Clean this!" %}" />
     </form>
+
+    <p><a href="http://top-coding-party.readthedocs.org/">{% trans "Documentation" %}</a></p>
 {% endblock content %}
