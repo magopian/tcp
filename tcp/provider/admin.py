@@ -9,6 +9,7 @@ from .models import Provider, LinkMatch
 class LinkMatchInline(admin.TabularInline):
     model = LinkMatch
 
+
 class ProviderAdmin(admin.ModelAdmin):
     inlines = [LinkMatchInline]
     model = Provider

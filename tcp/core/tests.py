@@ -13,7 +13,7 @@ from .models import Request
 class RequestTest(TestCase):
     """Test the request"""
 
-    def test_match_provider(self):
+    def test_match(self):
         """Match a provider."""
         provider = Provider.objects.create(name='Foo',
                                            link_template='_',
@@ -23,23 +23,24 @@ class RequestTest(TestCase):
                                          pattern='foo_video/(.*)')
         # matching request
         request = Request(initial_code='some stuff foo_video/barbaz')
-        res, prov = request.match()
-        self.assertTrue(res)
-        self.assertEqual(prov, provider)
+        request.match()
+        self.assertEqual(request.video_id, 'barbaz')
+        self.assertEqual(request.provider, provider)
         # matching request ignore case
         request = Request(initial_code='some stuff FOO_VIDEO/barbaz')
-        res, prov = request.match()
-        self.assertTrue(res)
-        self.assertEqual(prov, provider)
+        request.match()
+        self.assertEqual(request.video_id, 'barbaz')
+        self.assertEqual(request.provider, provider)
         # matching request multiline
         request = Request(initial_code='some stuff\nFOO_VIDEO/barbaz')
-        res, prov = request.match()
-        self.assertTrue(res)
-        self.assertEqual(prov, provider)
+        request.match()
+        self.assertEqual(request.video_id, 'barbaz')
+        self.assertEqual(request.provider, provider)
         # non matching request
         request = Request(initial_code='some stuff video/barbaz')
-        res, prov = request.match()
-        self.assertIsNone(res)
+        request.match()
+        self.assertEqual(request.video_id, '')
+        self.assertIsNone(request.provider)
 
     def test_get_link(self):
         """Compute full video link."""
@@ -50,22 +51,22 @@ class RequestTest(TestCase):
                 validation_link_template='_')
         match = LinkMatch.objects.create(provider=provider,
                                          pattern='foo_video/(.*)')
-        request = Request(initial_code='stuff foo_video/barbaz')
-        link = request.get_link('barbaz', provider)
-        self.assertEqual(link, 'http://barbaz')
+        request = Request(initial_code='_', video_id='bar', provider=provider)
+        link = request.get_link()
+        self.assertEqual(link, 'http://bar')
 
     def test_get_clean_code(self):
         """Compute the new embed code."""
         provider = Provider.objects.create(
                 name='Foo',
-                link_template='_',
+                link_template='http://{{ video_id }}',
                 embed_template='some code {{ video_link }}',
                 validation_link_template='_')
         match = LinkMatch.objects.create(provider=provider,
                                          pattern='foo_video/(.*)')
-        request = Request(initial_code='stuff foo_video/barbaz')
-        link = request.get_clean_code('http://barbaz', provider)
-        self.assertEqual(link, 'some code http://barbaz')
+        request = Request(initial_code='_', video_id='bar', provider=provider)
+        link = request.get_clean_code()
+        self.assertEqual(link, 'some code http://bar')
 
     def test_validate(self):
         """Validate the video link."""
@@ -75,13 +76,12 @@ class RequestTest(TestCase):
                 embed_template='_',
                 validation_link_template='http://httpbin.org/status/'
                                          '{{video_id }}')
-        request = Request(initial_code='_')
-        res = request.validate('200', provider)
-        self.assertTrue(res)
-        res = request.validate('301', provider)
-        self.assertTrue(res)
-        res = request.validate('400', provider)
-        self.assertFalse(res)
+        request = Request(initial_code='_', video_id='200', provider=provider)
+        self.assertTrue(request.validate())
+        request = Request(initial_code='_', video_id='301', provider=provider)
+        self.assertTrue(request.validate())
+        request = Request(initial_code='_', video_id='400', provider=provider)
+        self.assertFalse(request.validate())
 
 
     def test_save(self):
@@ -95,14 +95,13 @@ class RequestTest(TestCase):
         # matching request
         request = Request(initial_code='stuff foo_video/barbaz')
         request.save()
+        self.assertEqual(request.video_id, 'barbaz')
         self.assertEqual(request.provider, provider)
-        self.assertEqual(request.video_link, 'http://barbaz')
-        self.assertEqual(request.clean_code, 'some code http://barbaz')
         # non matching request
         request = Request(initial_code='stuff video/barbaz')
         request.save()
-        self.assertEqual(request.provider, None)
-        self.assertEqual(request.message, 'No provider found for this video')
+        self.assertEqual(request.video_id, '')
+        self.assertIsNone(request.provider)
 
 
 class RequestViewTest(TestCase):
