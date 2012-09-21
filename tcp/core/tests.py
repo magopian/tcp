@@ -1,15 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from json import loads
+from json import loads, dumps
 
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from django.test.client import Client
+from django.utils.translation import ugettext_lazy as _
 
 from tcp.provider.models import Provider, LinkMatch
 
 from .models import Request
+from .views import validate
+
+
+class Helper(object):
+    """Mock the requests.head calls."""
+
+    def __init__(self, status_code):
+        self.status_code = status_code
+
+    def head(self, link):
+        return self
 
 
 class RequestTest(TestCase):
@@ -67,16 +79,6 @@ class RequestTest(TestCase):
 
     def test_validate(self):
         """Validate the video link."""
-
-        class Helper(object):
-            """Mock the requests.head calls."""
-
-            def __init__(self, status_code):
-                self.status_code = status_code
-
-            def head(self, link):
-                return self
-
         request = Request(initial_code='_',
                           video_id='foo',
                           provider=self.provider)
@@ -153,3 +155,25 @@ class RequestViewTest(TestCase):
         self.assertEqual(Request.objects.count(), 1)  # creates a request
         self.assertContains(response, "video_id")
         self.assertTrue(loads(response.content))  # json can be decoded
+
+    def test_validate_view_unknown_provider(self):
+        validate_url = reverse('core:validate', kwargs={'provider': 'unknown',
+                                                        'video_id': 'foo'})
+        response = self.client.get(validate_url)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, _("Provider not found"))
+
+    def test_validate_view_valid_video(self):
+        response = validate(request=None, provider='Foo', video_id='foo',
+                            helper=Helper(200))
+        data = {'valid': 'true'}
+        self.assertEqual(response.content, dumps(data))
+        response = validate(request=None, provider='Foo', video_id='foo',
+                            helper=Helper(301))
+        self.assertEqual(response.content, dumps(data))
+
+    def test_validate_view_invalid_video(self):
+        response = validate(request=None, provider='Foo', video_id='foo',
+                            helper=Helper(404))
+        data = {'valid': 'false'}
+        self.assertEqual(response.content, dumps(data))

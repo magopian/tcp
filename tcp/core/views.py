@@ -5,8 +5,11 @@ from json import dumps
 
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseBadRequest, HttpResponse
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import CreateView, DetailView
+import requests
 
+from tcp.provider.models import Provider
 from .forms import RequestForm
 from .models import Request
 
@@ -38,7 +41,18 @@ class RequestCreateView(CreateView):
 
     def get_success_url(self):
         return reverse_lazy('core:cleaned', kwargs={'pk': self.object.pk})
-
 create_view = RequestCreateView.as_view()
 
 detail_view = DetailView.as_view(model=Request)
+
+
+def validate(request, provider, video_id, helper=requests):
+    """Return True if the video is still available."""
+    try:
+        provider = Provider.objects.get(name=provider)
+    except Provider.DoesNotExist:
+        return HttpResponseBadRequest(_("Provider not found"))
+    req = Request(provider_id=provider.pk, video_id=video_id)
+    data = {'valid': 'true' if req.validate(helper=helper) else 'false'}
+    return HttpResponse(dumps(data),
+                        content_type='application/json; charset=utf-8')
